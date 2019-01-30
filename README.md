@@ -43,10 +43,10 @@ it works sort of poorly.
 
 ### Installing
 
-`setup.py` builds a script called `multihist`.  Install it to
+1. `setup.py` builds a script called `multihist`.  Install it to
 your path somewhere.
 
-In your `.bash_profile`, add this bit.  Update `SHELL_HISTDIR` to
+2. In your `.bash_profile`, add this bit.  Update `SHELL_HISTDIR` to
 taste, and merge in whatever customizations you may already have
 to your `PROMPT_COMMAND`.
 
@@ -82,6 +82,13 @@ function init_histfiles () {
 
 export PROMPT_COMMAND="update_histfiles;"
 init_histfiles;
+```
+3. Create the `SHELL_HISTDIR` directory
+4. Copy your existing BASH history file, usually `~/.bash_history`, into the new directory.
+   Any filename starting with `shell-` will work, as long as it won't collide with any possible
+   ${SHELL_HISTFILE} names:
+```
+$ cp ~/.bash_history ${SHELL_HISTDIR}/shell-historical
 ```
 
 
