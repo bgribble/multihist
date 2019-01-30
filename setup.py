@@ -10,7 +10,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     entry_points={
         'console_scripts': [
-            'multihist=multihist:nain'
+            'multihist=multihist.multihist:main'
         ]
     },
 )

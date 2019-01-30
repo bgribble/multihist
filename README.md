@@ -63,7 +63,7 @@ function init_histfiles () {
     fi
     touch ${SHELL_HISTFILE}
     touch ${HISTFILE}
-    multihist --init
+    multihist --init;
 }
 
 export PROMPT_COMMAND="update_histfiles;"
