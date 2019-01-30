@@ -1,40 +1,54 @@
 ## multihist -- manage multiple open shell histories
 
-I use tmux and typically have 10 or so `bash` shells open at any one time.
-I use shell history fairly aggressively to minimize how much I type.  It's
-always been frustrating to me that `bash` wants a single HISTFILE and that 
-reading, writing, and searching it works sort of poorly.
+I use tmux and typically have 10 or so `bash` shells open at any
+one time.  I use shell history fairly aggressively to minimize
+how much I type.  It's always been frustrating to me that `bash`
+wants a single HISTFILE and that reading, writing, and searching
+it works sort of poorly.
 
 ### Goals
 
-* Up-arrow in a shell always steps through the history of commands typed in that
-specific shell
-* Ctrl-R (reverse isearch) can search the history of all the shells, not just 
-the one I'm typing in
+* Up-arrow in a shell always steps through the history of
+  commands typed in that specific shell
+* Ctrl-R (reverse-isearch) can search the history of all the
+  shells, not just the one I'm typing in
 * History is forever
+
+### What I tried before this
+
+* Default behavior (history kept in memory, saved on quit):
+  up-arrow works, but commands typed in other shells aren't
+  reverse-isearchable and the last shell to quit blows away
+  `~/.bash_history` so my history is not forever
+* `export PROMPT_COMMAND="history -a; history -c; history -r"`:
+  doesn't preserve up-arrow behavior; up-arrow gets last command
+  executed in any shell.
 
 ### How it works
 
-* Shell histories live in a new directory.  On my machine it's 
-~/.history 
-* Each shell saves a history file containing the commands typed into that 
-specific shell
-* Each shell uses as its HISTFILE a custom merged file that's dynamically 
-updated, which contains the shell-specific histories of all the shells, 
-with this specific shell's history last
-* A helper script is invoked as the `PROMPT_COPMMAND` to update the merged history 
-files if needed
-* Shell histories from old/closed shells are automatically compacted but the
-contents stay around forever. 
-* To improve the performance of rebuilding merged files, there's a table of contents
-for each merged history file
+* Shell histories live in a new directory.  On my machine it's
+  ~/.history
+* Each shell saves a history file containing the commands typed
+  into that specific shell
+* Each shell uses as its HISTFILE a custom merged file that's
+  dynamically updated, which contains the shell-specific
+  histories of all the shells, with this specific shell's history
+  last
+* A helper script is invoked as the `PROMPT_COPMMAND` to update
+  the merged history files if needed
+* Shell histories from old/closed shells are automatically
+  compacted but the contents stay around forever.
+* To improve the performance of rebuilding merged files, there's
+  a table of contents for each merged history file
 
-### Installing 
+### Installing
 
-`setup.py` builds a script called `multihist`.  Install it to your path somewhere.
+`setup.py` builds a script called `multihist`.  Install it to
+your path somewhere.
 
-In your `.bash_profile`, add this bit.  Update `SHELL_HISTDIR` to taste, and merge in
-whatever customizations you may already have to your `PROMPT_COMMAND`.
+In your `.bash_profile`, add this bit.  Update `SHELL_HISTDIR` to
+taste, and merge in whatever customizations you may already have
+to your `PROMPT_COMMAND`.
 
 ```
 export SHELL_UUID=`uuidgen`
@@ -45,7 +59,7 @@ export HISTFILE=${SHELL_HISTDIR}/merged-${SHELL_UUID}
 function update_histfiles () {
     history -a ${SHELL_HISTFILE} ;
     multihist --update;
-    history -c ; 
+    history -c ;
     history -r ;
 }
 
